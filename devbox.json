@@ -1,12 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.10.7/.schema/devbox.schema.json",
   "packages": [
-    "civo@latest",
     "envsubst@latest",
     "gh@latest",
     "go@latest",
     "go-task@latest",
-    "path:gcloud#google-cloud-sdk",
     "gum@latest",
     "jq@latest",
     "k9s@latest",
@@ -19,18 +17,40 @@
     "kustomize@latest",
     "oras@latest",
     "nodejs_20@latest",
-    "poetry@latest",
-    "python312@latest",
     "tilt@latest",
     "yq-go@latest",
     "act@latest",
-    "kubent@latest"
+    "kubent@latest",
+    "starship@1.21.1",
+    "bash-completion@2.15.0"
   ],
   "shell": {
     "init_hook": [
+      "mkdir ~/tmp  > /dev/null 2>&1",
+      "mkdir ~/.local/share/fonts  > /dev/null 2>&1",
+      "curl -sL https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/FiraCode.zip --output ~/tmp/nerds.zip; unzip -oqq ~/tmp/nerds.zip -d ~/tmp/nerds",
+      "cp -r ~/tmp/nerds/* ~/.local/share/fonts",
+      "fc-cache -f ~/.local/share/fonts",
+      "export STARSHIP_CONFIG=${PWD}/starship/starship.toml",
+      "eval \"$(starship init bash)\"",
       "export GOBIN=$(git rev-parse --show-toplevel)/bin",
       "export PATH=$GOBIN:$PATH",
-      "go install sigs.k8s.io/cloud-provider-kind@v0.2.0"
+      "go install sigs.k8s.io/cloud-provider-kind@v0.2.0",
+      "source <(kubectl completion bash)",
+      "alias k=kubectl",
+      "alias getallns='k get namespaces'",
+      "alias getallservices='k get svc --all-namespaces'",
+      "alias getservices='k get svc'",
+      "alias getallpods='k get pods --all-namespaces'",
+      "alias moreinfoallpods='k get pods --all-namespaces -o wide'",
+      "alias getpods='k get pods'",
+      "alias moreinfopods='k get pods -o wide'",
+      "alias getallnodes='k get nodes --all-namespaces'",
+      "alias moreinfoallnodes='k get nodes --all-namespaces -o wide'",
+      "alias t=task",
+      "alias tl='task --list'",
+      "complete -o default -F __start_kubectl k",
+      "eval \"$(task --completion bash)\""
     ],
     "scripts": {
       "test": ["echo \"Error: no test specified\" && exit 1"]

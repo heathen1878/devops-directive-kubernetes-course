@@ -12,6 +12,10 @@ spec:
       labels:
         app: fluentd
     spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
       containers:
         - name: fluentd
           image: fluentd:v1.16-1
