@@ -1,13 +1,31 @@
 # three node (two workers) cluster config
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+name: ${whoami}-cluster
 nodes:
   - role: control-plane
   - role: worker
     extraMounts:
       - hostPath: ${REPLACE_WITH_ABSOLUTE_PATH}/kind-bind-mount-1
         containerPath: /some/path/in/container
+    labels:
+      tier: workloads
   - role: worker
     extraMounts:
       - hostPath: ${REPLACE_WITH_ABSOLUTE_PATH}/kind-bind-mount-2
         containerPath: /some/path/in/container
+    labels:
+      tier: workloads
+  - role: worker
+    extraMounts:
+      - hostPath: ${REPLACE_WITH_ABSOLUTE_PATH}/kind-bind-mount-2
+        containerPath: /some/path/in/container
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
+    labels:
+      tier: ingress

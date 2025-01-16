@@ -47,7 +47,19 @@ tasks:
       - cmd: gum style "💡 Add /etc/hosts entry (or set up a real DNS name pointing to LoadBalancer IP address) to access via host"
         silent: true
 
-  06-delete-namespace:
+  06-create-kind-cluster-ingress:
+    desc: "Creates an Ingress controller on ddkc-worker3"
+    cmds:
+      - kubectl apply -f deploy-ingress-nginx.yaml
+      - cmd: gum style "💡 Add /etc/hosts entry (or set up a real DNS name pointing to LoadBalancer IP address) to access via host"
+
+  07-deploy-pods-using-ingress:
+    desc: "Creates two pods using the ingress controller"
+    cmds:
+      - kubectl apply -f pods-ingress.yaml
+      - cmd: gum style "💡 Deployed Foo and Bar Pods and associated services" 
+
+  08-delete-namespace:
     desc: "Delete the namespace(s) to clean up"
     cmds:
       - cmd: gum style "🚨 Deleting the namespace recursively deletes the resources inside of it! 🚨 "
